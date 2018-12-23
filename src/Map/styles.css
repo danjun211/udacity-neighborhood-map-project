@@ -1,0 +1,6 @@
+#map {
+  width: 100%;
+  height: calc(100% - 12rem - 40px - 55px);
+  transform: translateX(0px) translateY(40px);
+
+}

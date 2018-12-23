@@ -1,0 +1,7 @@
+#info-panel {
+  position: fixed;
+  bottom: 0;
+  height: 12rem;
+  width: 100%;
+  background-color: #fff;
+}
