@@ -1,7 +1,38 @@
 #info-panel {
-  position: fixed;
+  position: absolute;
   bottom: 0;
-  height: 12rem;
+  height: 80%;
   width: 100%;
   background-color: #fff;
+  z-index: 2;
+  transform: translateY(calc(100% - 15rem));
+}
+
+#info-panel .content { 
+  height: 100%;
+}
+
+#info-panel .content div.detail {
+  height: calc(100% - 15rem);
+}
+
+#info-panel .content div:not(.detail) {
+  max-height: 15rem;
+}
+
+#info-panel .info-panel-opener {
+  position: absolute;
+  top: -1.75rem;
+  width: 16%;
+  left: 42%;
+  height: 1.75rem;
+}
+
+#info-panel.shrink {
+  height: 0;
+  transform: translateY(100%);
+}
+
+#info-panel.shrink .content {
+  display: none;
 }

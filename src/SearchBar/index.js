@@ -13,9 +13,10 @@ class SearchBar extends Component {
 
     return (
       <div className="search-result">
-        <ul className="list-group">
+        <ul className="list-group" aria-label="searched list of places">
           {searchResult.map((loc, i) => (
             <li
+              tabIndex="0"
               className="list-group-item list-group-item-action"
               onClick={setLocations.bind(this, [loc])}
               key={i}
@@ -35,7 +36,7 @@ class SearchBar extends Component {
   }
 
   searchLocationsByQuery(query = "", isRemarking = false) {
-    const { searchLocation, setLocations, locations } = this.props;
+    const { searchLocation, setLocations } = this.props;
 
     if (query === "") {
       this.setState({
@@ -59,7 +60,7 @@ class SearchBar extends Component {
   }
 
   render() {
-    const { searchLocation, setLocations, locations } = this.props;
+    const { setLocations } = this.props;
 
     return (
       <div className="search-container">
@@ -76,13 +77,19 @@ class SearchBar extends Component {
           />
           <div
             className="search-control-item search"
+            role="button"
+            tabIndex="0"
             onClick={setLocations.bind(this, this.getSearchedLocations())}
+            onKeyPress={setLocations.bind(this, this.getSearchedLocations())}
           >
             <FontAwesomeIcon icon="search" />
           </div>
           <div
+            tabIndex="0"
+            role="button"
             className="search-control-item my-close"
             onClick={() => this.clearInput()}
+            onKeyPress={() => this.clearInput()}
           >
             <FontAwesomeIcon icon="times" />
           </div>

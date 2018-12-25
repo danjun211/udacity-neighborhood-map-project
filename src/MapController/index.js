@@ -5,7 +5,7 @@ import "./styles.css";
 
 class MapController extends Component {
   render() {
-    const { searchLocation, setLocations, locations } = this.props;
+    const { searchLocation, setLocations, locations, updateInfoPanel } = this.props;
 
     return (
       <div className="outer-container">
@@ -14,7 +14,7 @@ class MapController extends Component {
           setLocations={setLocations}
           searchLocation={searchLocation}
         />
-        <InfoPanel />
+        <InfoPanel updateInfoPanel={updateInfoPanel}/>
       </div>
     );
   }

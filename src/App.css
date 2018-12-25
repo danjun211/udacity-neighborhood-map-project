@@ -1,8 +1,93 @@
-html, body, #root, main {
+html,
+body,
+#root,
+main {
   height: 100%;
   width: 100%;
 }
 
+main > .wrapper {
+  width: 100%;
+  height: calc(100% - 55px);
+}
+
+
 .hide {
   display: none;
+}
+
+@media (min-width: 680px) {
+  main > .wrapper {
+    display: flex;
+  }
+
+  #map {
+    display: inline-block;
+    width: calc(100% - 400px);
+    height: 100%;
+    top: -40px;
+  }
+
+  #map.shrink {
+    height: 100%;
+  }
+
+  .outer-container {
+    display: inline-block;
+    position: relative;
+    width: 400px;
+    height: 100%;
+    background-color: yellow;
+  }
+
+  .outer-container.shrink {
+    -ms-transform: translate(-400px, 0); /* IE 9 */
+    -webkit-transform: translate(-400px, 0); /* Safari */
+    transform: translate(-400px, 0);
+  }
+
+  #info-panel {
+    position: relative;
+    height: calc(100% - 40px);
+    -webkit-transform: unset;
+    transform: unset;
+  }
+
+  #info-panel.shrink {
+    height: calc(100% - 40px);
+    -webkit-transform: unset;
+    transform: unset;
+  }
+
+  #info-panel .info-panel-opener {
+    /* top: calc(50% - 95px);
+    left: calc(100% - 12px);
+    right: 0;
+    width: 56px;
+    transform: rotate(90deg); */
+    display: none;
+  }
+
+  .search-container {
+    position: relative;
+  }
+
+  .search-container .search-result {
+    position: absolute;
+    top: 100%;
+    z-index: 3;
+    width: 100%;
+  }
+
+  #info-panel .carousel,
+  #info-panel .carousel div,
+  #info-panel .carousel img {
+    max-height: 300px;
+    height: 100%;
+  }
+
+  #info-panel > div {
+    position: absolute;
+    bottom: 0;
+  }
 }

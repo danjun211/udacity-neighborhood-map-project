@@ -1,6 +1,9 @@
-#map {
+#map{
   width: 100%;
-  height: calc(100% - 12rem - 40px - 55px);
+  height: calc(100% - 40px);
   transform: translateX(0px) translateY(40px);
-
+  z-index: 1;
+}
+#map.shrink {
+  height: calc(100% - 15rem - 40px);
 }

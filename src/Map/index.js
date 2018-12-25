@@ -1,28 +1,37 @@
 import React, { Component } from "react";
 import "./styles.css";
+import googleMapApi from "../googlemap-api-key.json";
 
 class Map extends Component {
-
   constructor(props) {
     super(props);
 
     this.markers = [];
     this.state = {
-      isReady: false
+      isReady: false,
+      isShrinked: false
     };
   }
 
   componentDidMount() {
-    const apiKey = "AIzaSyDdgp-igwGeBr-HAaEup3yPB3V2Cxn-58E";
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+    const script = document.createElement("script");
+
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${
+      googleMapApi.key
+    }&libraries=places`;
     script.async = true;
     script.defer = true;
     script.addEventListener("load", () => {
       this.setState({ isReady: true });
     });
 
+    this.context.addEventListener("update", this.handleUpdate.bind(this));
+
     document.body.appendChild(script);
+  }
+
+  componentWillUnmount() {
+    this.context.removeEventListener("update", this.handleUpdate.bind(this));
   }
 
   componentDidUpdate() {
@@ -47,25 +56,104 @@ class Map extends Component {
     this.setMapOnAll(null);
   }
 
-  drawMarkers(locations) {
+  setPlaceIdThenDraw({ title, location, description }) {
+    var request = {
+      location: this.map.getCenter(),
+      radius: "500",
+      query: title
+    };
 
-    this.markers = [];
-    for (let i = 0; i < locations.length; i++) {
-      let position = locations[i].location;
-      let title = locations[i].title;
-      let marker = new window.google.maps.Marker({
+    this.placesService.textSearch(request, (results, status) => {
+      let placeId = null;
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        placeId = results[0].place_id;
+      }
+
+      const marker = new window.google.maps.Marker({
         map: this.map,
-        position: position,
-        title: title,
-        animation: window.google.maps.Animation.DROP,
-        id: i
+        position: location,
+        placeId: placeId,
+        title: title
       });
+      marker["description"] = description;
+      marker.addListener("click", this.handleMarkerClick.bind(this, marker));
       this.markers.push(marker);
+    });
+  }
+
+  drawMarkers(locations) {
+    this.markers = [];
+    this.placesService = new window.google.maps.places.PlacesService(this.map);
+
+    for (let i = 0; i < locations.length; i++) {
+      this.setPlaceIdThenDraw(locations[i]);
     }
   }
 
+  handleMarkerClick(marker) {
+    this.getPlaceInformation(marker.placeId, {
+      title: marker.title,
+      description: marker.description
+    });
+  }
+
+  getPlaceInformation(placeId, { title, description }) {
+    const infoPanel = window.document.getElementById("info-panel");
+    if (placeId !== null) {
+      this.placesService.getDetails({ placeId: placeId }, (place, status) => {
+        if (status === "OK") {
+          infoPanel.dispatchEvent(
+            new CustomEvent("update", {
+              detail: {
+                photos: place.photos,
+                placeInfo: {
+                  name: title,
+                  description: description,
+                  address: place.formatted_address,
+                  call: place.formatted_phone_number
+                }
+              }
+            })
+          );
+        }
+      });
+    } else {
+      infoPanel.dispatchEvent(
+        new CustomEvent("update", {
+          detail: {
+            photos: [],
+            placeInfo: {
+              name: title,
+              description: description,
+              address: "",
+              call: ""
+            }
+          }
+        })
+      );
+    }
+    if (infoPanel.classList.contains("shrink")) {
+      const infoPanelOpener = infoPanel.querySelector(".info-panel-opener");
+      infoPanelOpener.click();
+    }
+  }
+
+  handleUpdate(event) {
+    this.setState({
+      isShrinked: event.detail.isShrinked
+    });
+  }
+
   render() {
-    return <div id="map" />;
+    return (
+      <div
+        id="map"
+        role="application"
+        aria-label="Map displaying location of my neighbors"
+        ref={elem => (this.context = elem)}
+        className={this.state.isShrinked ? "shrink" : ""}
+      />
+    );
   }
 }
 

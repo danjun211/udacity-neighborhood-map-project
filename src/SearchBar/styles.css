@@ -27,6 +27,9 @@
   width: 2.5rem;
   cursor: pointer;
 }
+.search-container .search-result {
+  z-index: 3;
+}
 
 .search-container .search-result ul {
   margin: 0;
