@@ -4,9 +4,9 @@ import Map from "./Map";
 import MapController from "./MapController";
 import "./App.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faTimes, faAngleUp, faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faSearch, faTimes);
+library.add(faSearch, faTimes, faAngleUp, faAngleDown);
 
 class App extends Component {
   constructor(props) {
